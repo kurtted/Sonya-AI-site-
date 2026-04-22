@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sonya AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="loading-screen is-animating" id="loadingScreen" aria-hidden="true">
+    <div class="loading-code-rain" aria-hidden="true">
+      <span>101101 SONYA AI 01001101</span>
+      <span>ACCESS :: REMOTE CORE :: AUTH</span>
+      <span>01101001 01000001 1100101</span>
+      <span>SONYA // INIT // CONTROL</span>
+      <span>1101001 0010110 10101101</span>
+      <span>SECURE_LINK ESTABLISHED</span>
+    </div>
+    <div class="loading-code-grid" aria-hidden="true">
+      <span>01</span>
+      <span>10</span>
+      <span>AI</span>
+      <span>77</span>
+      <span>XR</span>
+      <span>11</span>
+      <span>00</span>
+      <span>99</span>
+      <span>SONYA</span>
+      <span>CTRL</span>
+      <span>22</span>
+      <span>13</span>
+    </div>
+    <div class="loading-screen-inner">
+      <h1 class="loading-brand">Sonya AI</h1>
+      <div class="loading-welcome-wrap">
+        <span class="loading-line" aria-hidden="true"></span>
+        <p class="loading-welcome">WELCOME</p>
+        <span class="loading-line" aria-hidden="true"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay-layer hidden" id="overlayLayer"></div>
+  <div class="toast-stack" id="toastStack" aria-live="polite" aria-atomic="true"></div>
+
+  <div class="auth-modal hidden" id="authModal" aria-hidden="true">
+    <div class="auth-card">
+      <button class="modal-close" id="closeAuthModal" type="button" aria-label="Закрыть">×</button>
+      <div class="auth-brand">
+        <div class="auth-brand-mark">S</div>
+        <div>
+          <h2>Sonya AI</h2>
+          <p>Добро пожаловать</p>
+        </div>
+      </div>
+
+      <div class="auth-tabs">
+        <button class="auth-tab is-active" data-auth-tab="login" type="button">Вход</button>
+        <button class="auth-tab" data-auth-tab="register" type="button">Регистрация</button>
+      </div>
+
+      <form class="auth-form is-active" id="loginForm">
+        <label class="field">
+          <span>Логин</span>
+          <input type="text" name="login" placeholder="Введите логин" autocomplete="username" required>
+        </label>
+        <label class="field">
+          <span>Пароль</span>
+          <input type="password" name="password" placeholder="Введите пароль" autocomplete="current-password" required>
+        </label>
+        <button class="primary-action" type="submit">Войти</button>
+        <button class="ghost-action" type="button">Забыли пароль?</button>
+      </form>
+
+      <form class="auth-form" id="registerForm">
+        <label class="field">
+          <span>Логин</span>
+          <input type="text" name="login" placeholder="Придумайте логин" autocomplete="username" required>
+        </label>
+        <label class="field">
+          <span>Пароль</span>
+          <input type="password" name="password" placeholder="Придумайте пароль" autocomplete="new-password" required>
+        </label>
+        <button class="primary-action" type="submit">Создать аккаунт</button>
+      </form>
+
+      <p class="form-status" id="authStatus"></p>
+    </div>
+  </div>
+
+  <div class="bubble-modal hidden" id="bubbleModal" aria-hidden="true">
+    <div class="bubble-card" id="bubbleCard"></div>
+  </div>
+
+  <header class="toolbar" id="top">
+    <a class="brand" href="#top">Sonya AI</a>
+
+    <nav class="toolbar-nav" aria-label="Основная навигация">
+      <a href="#about" class="is-active" data-nav-link="about">О программе</a>
+      <a href="#store" data-nav-link="store">Магазин</a>
+      <a href="#reviews" data-nav-link="reviews">Отзывы</a>
+    </nav>
+
+    <div class="toolbar-right">
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Переключить тему">
+        <span class="theme-toggle-glow" aria-hidden="true"></span>
+        <span class="theme-icon theme-icon-sun" aria-hidden="true">
+          <svg viewBox="0 0 24 24" role="presentation">
+            <circle cx="12" cy="12" r="4.25"></circle>
+            <path d="M12 2.75v2.5M12 18.75v2.5M21.25 12h-2.5M5.25 12h-2.5M18.54 5.46l-1.77 1.77M7.23 16.77l-1.77 1.77M18.54 18.54l-1.77-1.77M7.23 7.23L5.46 5.46"></path>
+          </svg>
+        </span>
+        <span class="theme-icon theme-icon-moon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" role="presentation">
+            <path d="M20.2 14.15A8.35 8.35 0 0 1 9.85 3.8a8.75 8.75 0 1 0 10.35 10.35Z"></path>
+          </svg>
+        </span>
+      </button>
+
+      <div class="guest-actions" id="guestActions">
+        <button class="toolbar-text-button" data-open-auth="login" type="button">Войти</button>
+        <button class="toolbar-text-button toolbar-text-button-accent" data-open-auth="register" type="button">Регистрация</button>
+      </div>
+
+      <div class="profile-toolbar hidden" id="profileToolbar">
+        <button class="profile-chip" id="profileMenuToggle" type="button">
+          <span class="profile-chip-avatar">
+            <img class="profile-chip-avatar-image hidden" id="toolbarAvatarImage" alt="Аватар">
+            <span class="profile-chip-avatar-fallback" id="toolbarAvatar">S</span>
+          </span>
+          <span class="profile-chip-meta">
+            <strong id="toolbarDisplayName">Sonya</strong>
+            <span class="toolbar-role hidden" id="toolbarRole">ADMIN</span>
+          </span>
+          <span class="profile-chip-caret">⌄</span>
+        </button>
+
+        <div class="profile-dropdown hidden" id="profileDropdown">
+          <button data-profile-action="account" type="button"><span>◫</span><span>Аккаунт</span></button>
+          <button data-profile-action="topup" type="button"><span>＋</span><span>Пополнить</span></button>
+          <button data-profile-action="logout" type="button"><span>↦</span><span>Выйти</span></button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-content">
+    <section class="page-view is-active" data-page="about">
+      <section class="hero-section" id="about">
+        <div class="hero-panel">
+          <div class="hero-copy">
+            <h1>Sonya AI</h1>
+            <p class="hero-description">Многозадачный ИИ-Ассистент для дистанционного управления компьютером.</p>
+            <button class="hero-button" id="buyButton" type="button">
+              <span>Приобрести</span>
+              <span class="hero-button-arrow" aria-hidden="true">→</span>
+            </button>
+          </div>
+
+          <div class="hero-stats">
+            <article class="stat-card">
+              <div class="stat-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" role="presentation">
+                  <path d="M6.5 8.5h12l-1.2 6.1a1.5 1.5 0 0 1-1.47 1.2H9.12a1.5 1.5 0 0 1-1.47-1.2L6.5 8.5Zm0 0-.62-2.1A1.5 1.5 0 0 0 4.44 5.3H3.5"></path>
+                  <circle cx="10" cy="18.5" r="1.15"></circle>
+                  <circle cx="16" cy="18.5" r="1.15"></circle>
+                </svg>
+              </div>
+              <div class="stat-text">
+                <strong data-type-target="0"></strong>
+                <span>Продано</span>
+              </div>
+            </article>
+
+            <article class="stat-card">
+              <div class="stat-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" role="presentation">
+                  <rect x="5.5" y="6" width="13" height="12.5" rx="2.2"></rect>
+                  <path d="M9 6V4.75M15 6V4.75M8.75 10.25h6.5"></path>
+                </svg>
+              </div>
+              <div class="stat-text">
+                <strong data-type-target="0"></strong>
+                <span>Активных подписок</span>
+              </div>
+            </article>
+
+            <article class="stat-card">
+              <div class="stat-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" role="presentation">
+                  <circle cx="12" cy="12" r="7"></circle>
+                  <path d="M12 8.25v4.1l2.75 1.65"></path>
+                </svg>
+              </div>
+              <div class="stat-text">
+                <strong data-type-target="21.04.2026 • 12:00"></strong>
+                <span>Последнее обновление</span>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="about-section reveal-on-scroll" aria-labelledby="about-title">
+        <div class="section-heading">
+          <span class="section-kicker">О программе</span>
+          <h2 id="about-title">ИИ-ассистент для удалённой работы с компьютером и быстрого решения повседневных задач.</h2>
+          <p class="section-intro">Sonya AI подойдёт тем, кто хочет сократить ручную работу, быстрее взаимодействовать с системой и получить удобный инструмент для повседневных процессов без перегруженного интерфейса.</p>
+        </div>
+
+        <div class="about-grid">
+          <article class="about-card reveal-on-scroll">
+            <span class="about-card-index">01</span>
+            <h3>Дистанционное управление</h3>
+            <p>Sonya AI помогает выполнять действия на компьютере удалённо: открывать нужные окна, сопровождать процессы и ускорять ежедневную работу.</p>
+          </article>
+
+          <article class="about-card reveal-on-scroll">
+            <span class="about-card-index">02</span>
+            <h3>Многозадачный помощник</h3>
+            <p>Ассистент умеет быстро переключаться между задачами, держать контекст и помогать там, где вручную обычно тратится больше времени.</p>
+          </article>
+
+          <article class="about-card reveal-on-scroll">
+            <span class="about-card-index">03</span>
+            <h3>Понятный сценарий</h3>
+            <p>Удобный инструмент для управления, автоматизации и более комфортной повседневной работы без лишнего визуального шума.</p>
+          </article>
+        </div>
+
+        <div class="about-highlight reveal-on-scroll">
+          <div class="highlight-copy">
+            <span class="section-kicker">Что внутри</span>
+            <p>Sonya AI создан как современный цифровой оператор: помогает взаимодействовать с системой, экономит время на типовых действиях и делает дистанционную работу естественной и быстрой.</p>
+          </div>
+
+          <ul class="highlight-list">
+            <li>Удалённые действия и сопровождение процессов</li>
+            <li>Поддержка многозадачного сценария работы</li>
+            <li>Минималистичный и понятный пользовательский опыт</li>
+          </ul>
+        </div>
+      </section>
+    </section>
+
+    <section class="page-view" data-page="store">
+      <section class="store-section">
+        <div class="section-heading">
+          <span class="section-kicker">Магазин</span>
+          <h2>Выберите формат доступа к Sonya AI под личную работу, регулярное использование или максимальный комфорт.</h2>
+          <p class="section-intro">Все тарифы оформлены как понятные сценарии покупки: можно начать с базового доступа, выбрать продвинутый вариант для ежедневной работы или взять максимальный пакет.</p>
+        </div>
+
+        <div class="pricing-grid">
+          <article class="pricing-card reveal-on-scroll">
+            <span class="pricing-badge">Старт</span>
+            <h3>Basic</h3>
+            <p class="pricing-price">299 ₽</p>
+            <p class="pricing-summary">Для знакомства с Sonya AI и первых сценариев дистанционного управления.</p>
+            <ul class="pricing-features">
+              <li>Базовый доступ к ИИ-ассистенту</li>
+              <li>Подходит для простых задач</li>
+              <li>Быстрый старт без перегрузки</li>
+            </ul>
+            <button class="pricing-button" data-purchase-product="basic" type="button">Выбрать тариф</button>
+          </article>
+
+          <article class="pricing-card pricing-card-featured reveal-on-scroll">
+            <span class="pricing-badge">Популярный</span>
+            <h3>Premium</h3>
+            <p class="pricing-price">890 ₽</p>
+            <p class="pricing-summary">Оптимальный вариант для тех, кто хочет использовать Sonya AI чаще и увереннее.</p>
+            <ul class="pricing-features">
+              <li>Расширенный сценарий многозадачной работы</li>
+              <li>Более уверенный поток ежедневного использования</li>
+              <li>Лучший баланс между ценой и возможностями</li>
+            </ul>
+            <button class="pricing-button pricing-button-featured" data-purchase-product="premium" type="button">Приобрести Premium</button>
+          </article>
+
+          <article class="pricing-card reveal-on-scroll">
+            <span class="pricing-badge">Максимум</span>
+            <h3>Ultimate</h3>
+            <p class="pricing-price">1 499 ₽</p>
+            <p class="pricing-summary">Максимальный пакет для тех, кто хочет получить самый полный формат доступа.</p>
+            <ul class="pricing-features">
+              <li>Полный опыт взаимодействия с Sonya AI</li>
+              <li>Максимум удобства для интенсивной работы</li>
+              <li>Подходит для продвинутого сценария</li>
+            </ul>
+            <button class="pricing-button" data-purchase-product="ultimate" type="button">Выбрать максимум</button>
+          </article>
+        </div>
+      </section>
+    </section>
+
+    <section class="page-view" data-page="reviews">
+      <section class="store-section">
+        <div class="section-heading">
+          <span class="section-kicker">Отзывы</span>
+          <h2>Раздел отзывов появится следующим этапом разработки.</h2>
+          <p class="section-intro">Место для отзывов уже подготовлено, чтобы навигация работала корректно и без пустых экранов.</p>
+        </div>
+      </section>
+    </section>
+
+    <section class="page-view account-view" data-page="account">
+      <section class="account-page">
+        <div class="account-hero">
+          <div class="account-hero-left">
+            <div class="avatar-shell">
+              <img class="account-avatar-image hidden" id="accountAvatarImage" alt="Аватар профиля">
+              <div class="account-avatar-fallback" id="accountAvatarFallback">S</div>
+              <span class="avatar-admin-flag hidden" id="accountAdminFlag">ADMIN</span>
+              <button class="avatar-edit-button" id="changeAvatarButton" type="button" aria-label="Изменить аватар">
+                <svg viewBox="0 0 24 24" role="presentation">
+                  <path d="M8 6.5 9.6 4h4.8L16 6.5h2a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8.5a2 2 0 0 1 2-2h2Z"></path>
+                  <circle cx="12" cy="12.5" r="3.2"></circle>
+                </svg>
+              </button>
+              <input class="hidden-file-input" id="avatarInput" type="file" accept="image/*">
+            </div>
+
+          <div class="account-headings">
+            <span class="section-kicker">Профиль</span>
+            <span class="account-status-badge" id="accountStatus">Пользователь</span>
+            <h2 id="accountDisplayName">Sonya</h2>
+            <p id="accountLogin">@sonya</p>
+          </div>
+          </div>
+
+          <div class="account-balance-card">
+            <span>Баланс</span>
+            <strong id="accountBalance">0 ₽</strong>
+          </div>
+        </div>
+
+        <div class="account-actions-grid">
+          <button class="account-action-card" data-bubble="name" type="button">
+            <span class="account-action-icon">✎</span>
+            <strong>Изменить имя</strong>
+            <span>Отображаемое имя</span>
+          </button>
+          <button class="account-action-card" data-bubble="password" type="button">
+            <span class="account-action-icon">⌘</span>
+            <strong>Сменить пароль</strong>
+            <span>Текущий и новый пароль</span>
+          </button>
+          <button class="account-action-card" data-bubble="customize" type="button">
+            <span class="account-action-icon">◐</span>
+            <strong>Кастомизация</strong>
+            <span>Тема и фон сайта</span>
+          </button>
+          <button class="account-action-card" data-bubble="topup" type="button">
+            <span class="account-action-icon">＋</span>
+            <strong>Пополнить</strong>
+            <span>Скоро будет доступно</span>
+          </button>
+          <button class="account-action-card account-action-card-danger" id="logoutFromAccount" type="button">
+            <span class="account-action-icon">↦</span>
+            <strong>Выйти</strong>
+            <span>Завершить сессию</span>
+          </button>
+        </div>
+
+        <div class="account-info-grid">
+          <section class="account-info-panel">
+            <div class="account-panel-heading">
+              <h3>Покупки</h3>
+              <span>Ваши приобретения и установка</span>
+            </div>
+            <div class="purchase-list" id="purchaseList"></div>
+          </section>
+
+          <section class="account-info-panel">
+            <div class="account-panel-heading">
+              <h3>Важно</h3>
+              <span>Короткая информация по доступу</span>
+            </div>
+            <div class="account-note-list">
+              <article class="account-note-card">
+                <strong>Установка</strong>
+                <p>После покупки приложение появится в списке выше, а установка будет доступна через кнопку скачивания.</p>
+              </article>
+              <article class="account-note-card">
+                <strong>Доступ</strong>
+                <p>Текущий баланс, аватар и кастомизация сохраняются внутри вашего аккаунта и доступны после повторного входа.</p>
+              </article>
+            </div>
+          </section>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
